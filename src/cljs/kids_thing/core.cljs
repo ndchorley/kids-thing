@@ -1,8 +1,5 @@
 (ns kids-thing.core)
 
-(enable-console-print!)
-
-
 (.addEventListener
  (js/document.getElementById "submit-button")
  "click"
