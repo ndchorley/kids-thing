@@ -11,3 +11,12 @@
  "click"
  respond
  false)
+
+(.addEventListener
+ js/document
+ "DOMContentLoaded"
+ (fn [event]
+   (set!
+    (.-innerHTML (js/document.getElementById "question"))
+    "<h1>What is your name?"))
+ false)
