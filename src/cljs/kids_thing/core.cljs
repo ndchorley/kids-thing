@@ -1,10 +1,21 @@
 (ns kids-thing.core)
 
+(def mode (atom :respond))
+
+(defn next-mode [current-mode]
+  (if (= current-mode :respond) :next :respond))
+
+
 (defn respond [event]
-   (let [input (.-value (js/document.getElementById "input"))]
-     (set!
-      (.-innerHTML (js/document.getElementById "response"))
-      input)))
+  (println mode)
+  
+  (let [input (.-value (js/document.getElementById "input"))]
+    (set!
+     (.-innerHTML (js/document.getElementById "response"))
+     input))
+
+  (swap! mode next-mode)
+  (println mode))
 
 (.addEventListener
  (js/document.getElementById "submit-button")
