@@ -5,15 +5,14 @@
 (defn next-mode [current-mode]
   (if (= current-mode :respond) :next :respond))
 
-
 (defn respond [event]
+  (set! (.-textContent (js/document.getElementById "submit-button"))
+        (if (= (deref mode) :respond) "Next" "Click me"))
+
   (let [input (.-value (js/document.getElementById "input"))]
     (set!
      (.-innerHTML (js/document.getElementById "response"))
-     input))
-
-  (set! (.-textContent (js/document.getElementById "submit-button"))
-        (if (= (deref mode) :respond) "Click me" "Next"))
+     (str "Hi " input)))
 
   (swap! mode next-mode))
 
