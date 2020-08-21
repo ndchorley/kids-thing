@@ -7,15 +7,15 @@
 
 
 (defn respond [event]
-  (println mode)
-  
   (let [input (.-value (js/document.getElementById "input"))]
     (set!
      (.-innerHTML (js/document.getElementById "response"))
      input))
 
-  (swap! mode next-mode)
-  (println mode))
+  (set! (.-textContent (js/document.getElementById "submit-button"))
+        (if (= (deref mode) :respond) "Click me" "Next"))
+
+  (swap! mode next-mode))
 
 (.addEventListener
  (js/document.getElementById "submit-button")
