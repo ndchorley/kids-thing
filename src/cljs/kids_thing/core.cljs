@@ -13,8 +13,8 @@
   (def questions-to-responses
     {"What is your name?" (fn [answer] (str "Hi " answer))})
 
-  (let [answer (get-answer)
-        question (get-question)
+  (let [question (get-question)
+        answer (get-answer)
         respond (questions-to-responses question)]
     (respond answer)))
 
