@@ -1,3 +1,9 @@
 #!/bin/bash
 
-boot cljs target
+docker run  \
+       -it \
+       --rm \
+       -v "$PWD":/app \
+       -w /app \
+       clojure:openjdk-14-boot-2.8.3 \
+       boot cljs target
