@@ -1,5 +1,6 @@
 import ftplib
 import os
+import sys
 
 def upload_files(directory, ftp):
     with os.scandir(directory) as it:
@@ -7,7 +8,11 @@ def upload_files(directory, ftp):
             if entry.is_file():
                 print("Uploading file " + entry.path)
                 with open(entry.path, "rb") as f:
-                    ftp.storbinary("STOR " + entry.path.replace("target/", ""), f, blocksize=32768)
+                    ftp.storbinary(
+                        "STOR " + entry.path.replace("target/", ""),
+                        f,
+                        blocksize=32768
+                    )
             else:
                 name = entry.path.replace("target/", "")
                 print("Creating directory " + name + "/")
@@ -19,10 +24,10 @@ def upload_files(directory, ftp):
                 upload_files(entry.path, ftp)
 
 
-host = ""
-user = ""
-password = ""
-server_dir = ""
+host = sys.argv[1]
+user = sys.argv[2]
+password = sys.argv[3]
+server_dir = sys.argv[4]
 
 ftp = ftplib.FTP(host)
 ftp.login(user=user, passwd=password)
