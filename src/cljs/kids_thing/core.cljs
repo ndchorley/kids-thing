@@ -8,12 +8,16 @@
 (defn get-answer [] (.-value (js/document.getElementById "input")))
 
 (def questions-to-responses
-  (list {:question "What is your name?"
-         :responder (fn [name] (str "Hi " name))}))
+  (atom
+   (list {:question "What is your name?"
+          :responder (fn [name] (str "Hi " name))})))
+
+(defn get-responder []
+  ((peek (deref questions-to-responses)) :responder))
 
 (defn get-response []
   (let [answer (get-answer)
-        respond ((peek questions-to-responses) :responder)]
+        respond (get-responder)]
     (respond answer)))
 
 (defn show-response [response]
