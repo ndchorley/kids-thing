@@ -5,17 +5,15 @@
 (defn next-mode [current-mode]
   (if (= current-mode :respond) :next :respond))
 
-(defn get-question [] (.-innerHTML (js/document.getElementById "question")))
-
 (defn get-answer [] (.-value (js/document.getElementById "input")))
 
-(defn get-response []
-  (def questions-to-responses
-    {"What is your name?" (fn [answer] (str "Hi " answer))})
+(def questions-to-responses
+  (list {:question "What is your name?"
+         :responder (fn [name] (str "Hi " name))}))
 
-  (let [question (get-question)
-        answer (get-answer)
-        respond (questions-to-responses question)]
+(defn get-response []
+  (let [answer (get-answer)
+        respond ((peek questions-to-responses) :responder)]
     (respond answer)))
 
 (defn show-response [response]
