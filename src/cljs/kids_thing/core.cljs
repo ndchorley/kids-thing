@@ -18,19 +18,32 @@
         respond (questions-to-responses question)]
     (respond answer)))
 
-(defn respond [event]
-  (set! (.-textContent (js/document.getElementById "submit-button"))
-        (if (= (deref mode) :respond) "Next" "Click me"))
-
+(defn show-response [response]
   (set!
    (.-innerHTML (js/document.getElementById "response"))
-   (get-response))
+   response))
 
+(defn swap-button-text []
+  (set! (.-textContent (js/document.getElementById "submit-button"))
+        (if (= (deref mode) :respond) "Next" "Click me")))
+
+(defn respond []
+  (show-response (get-response))
+  (swap-button-text)
+  (swap! mode next-mode))
+
+(defn show-next-question []
+  (show-response "Next question please!")
+  (swap-button-text)
   (swap! mode next-mode))
 
 (.addEventListener
  (js/document.getElementById "submit-button")
  "click"
- respond
+ (fn [event]
+   (let [current-mode (deref mode)]
+     (cond
+       (= current-mode :respond) (respond)
+       (= current-mode :next) (show-next-question))))
  false)
 
