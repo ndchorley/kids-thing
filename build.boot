@@ -6,3 +6,5 @@
                  [org.clojure/clojurescript "1.10.764"]])
 
 (require '[adzerk.boot-cljs :refer [cljs]])
+
+(deftask deps [])
