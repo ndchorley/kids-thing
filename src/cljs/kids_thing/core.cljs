@@ -20,22 +20,34 @@
         respond (get-responder)]
     (respond answer)))
 
-(defn show-response [response]
+(defn show-text [what where]
   (set!
-   (.-innerHTML (js/document.getElementById "response"))
-   response))
+   (.-innerHTML (js/document.getElementById where))
+   what))
 
 (defn swap-button-text []
   (set! (.-textContent (js/document.getElementById "submit-button"))
         (if (= (deref mode) :respond) "Next" "Click me")))
 
 (defn respond []
-  (show-response (get-response))
+  (show-text (get-response) "response")
   (swap-button-text)
   (swap! mode next-mode))
 
-(defn show-next-question []
-  (show-response "Next question please!")
+(defn get-next-question []
+  (swap! questions-to-responses pop)
+  (let [questions-remaining (deref questions-to-responses)]
+    (if (empty? questions-remaining) "Have a nice day!" ((peek questions-remaining) :question))))
+
+(defn clear-input []
+  (set!
+   (.-value (js/document.getElementById "input"))
+   ""))
+
+(defn next-question []
+  (show-text (get-next-question) "question")
+  (show-text "" "response")
+  (clear-input)
   (swap-button-text)
   (swap! mode next-mode))
 
@@ -46,6 +58,6 @@
    (let [current-mode (deref mode)]
      (cond
        (= current-mode :respond) (respond)
-       (= current-mode :next) (show-next-question))))
+       (= current-mode :next) (next-question))))
  false)
 
