@@ -37,7 +37,9 @@
 (defn get-next-question []
   (swap! questions-to-responses pop)
   (let [questions-remaining (deref questions-to-responses)]
-    (if (empty? questions-remaining) "Have a nice day!" ((peek questions-remaining) :question))))
+    (if (empty? questions-remaining)
+      "Have a nice day!"
+      ((peek questions-remaining) :question))))
 
 (defn clear-input []
   (set!
