@@ -10,7 +10,9 @@
 (def questions-to-responses
   (atom
    (list {:question "What is your name?"
-          :responder (fn [name] {:text (str "Hi " name)})})))
+          :responder (fn [name]
+                       {:text (str "Hi " name)
+                        :image "https://live.staticflickr.com/7491/16296571715_b3ebde1e38_b.jpg"})})))
 
 (defn get-responder []
   ((peek (deref questions-to-responses)) :responder))
@@ -25,12 +27,18 @@
    (.-innerHTML (js/document.getElementById where))
    what))
 
+(defn show-image [url]
+  (let [element (js/document.createElement "img")]
+    (.setAttribute element "src" url)
+    (.append (js/document.getElementById "image") element)))
+
 (defn swap-button-text []
   (set! (.-textContent (js/document.getElementById "submit-button"))
         (if (= (deref mode) :respond) "Next" "Click me")))
 
 (defn respond []
   (show-text ((get-response) :text) "response")
+  (show-image ((get-response) :image))
   (swap-button-text)
   (swap! mode next-mode))
 
