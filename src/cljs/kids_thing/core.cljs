@@ -10,7 +10,7 @@
 (def questions-to-responses
   (atom
    (list {:question "What is your name?"
-          :responder (fn [name] (str "Hi " name))})))
+          :responder (fn [name] {:text (str "Hi " name)})})))
 
 (defn get-responder []
   ((peek (deref questions-to-responses)) :responder))
@@ -30,7 +30,7 @@
         (if (= (deref mode) :respond) "Next" "Click me")))
 
 (defn respond []
-  (show-text (get-response) "response")
+  (show-text ((get-response) :text) "response")
   (swap-button-text)
   (swap! mode next-mode))
 
