@@ -6,6 +6,8 @@
 (defn next-mode [current-mode]
   (if (= current-mode :respond) :next :respond))
 
+(defn set-mode [new-mode] (reset! mode new-mode))
+
 (defn get-answer [] (.-value (js/document.getElementById "input")))
 
 (defn get-responder []
@@ -36,7 +38,7 @@
     (if image (show-image image)))
 
   (set-button-text "Next")
-  (swap! mode next-mode))
+  (set-mode :next))
 
 (defn get-next-question []
   (swap! responses/questions-to-responses pop)
@@ -75,7 +77,7 @@
         (clear-input)
         (clear-response)
         (set-button-text "Click me")
-        (swap! mode next-mode))
+        (set-mode :respond))
 
       (do
         (clear-input)
