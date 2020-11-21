@@ -37,8 +37,10 @@
         (if (= (deref mode) :respond) "Next" "Click me")))
 
 (defn respond []
-  (show-text ((get-response) :text) "response")
-  (show-image ((get-response) :image))
+  (let [{:keys [text image]} (get-response)]
+    (show-text text "response")
+    (show-image image))
+
   (swap-button-text)
   (swap! mode next-mode))
 
