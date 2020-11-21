@@ -12,8 +12,7 @@
   ((peek (deref responses/questions-to-responses)) :responder))
 
 (defn get-response []
-  (let [answer (get-answer)
-        respond (get-responder)]
+  (let [answer (get-answer) respond (get-responder)]
     (respond answer)))
 
 (defn show-text [what where]
@@ -30,8 +29,8 @@
   (set! (.-textContent (js/document.getElementById "submit-button"))
         (if (= (deref mode) :respond) "Next" "Click me")))
 
-(defn respond []
-  (let [{:keys [text image]} (get-response)]
+(defn respond [response]
+  (let [{:keys [text image]} response]
     (show-text text "response")
     (show-image image))
 
@@ -48,17 +47,40 @@
    (.-value (js/document.getElementById "input"))
    ""))
 
+(defn clear-image []
+  (.remove (first (js/document.getElementsByTagName "img"))))
+
+(defn clear-response []
+  (clear-image)
+  (show-text "" "response"))
+
+(defn show-question [question]
+  (show-text question "question"))
+
+(defn clear-question [] (show-text "" "question"))
+
+(defn disable-button []
+  (.setAttribute
+   (js/document.getElementById "submit-button")
+   "disabled"
+   true))
+
 (defn next-question []
   (let [question (get-next-question)]
-    (if
-      question
-      (show-text question "question")
-      (show-text "Have a nice day!" "question")))
+    (if question
+      (do
+        (show-question question)
+        (clear-input)
+        (clear-response)
+        (swap-button-text)
+        (swap! mode next-mode))
 
-  (show-text "" "response")
-  (clear-input)
-  (swap-button-text)
-  (swap! mode next-mode))
+      (do
+        (clear-input)
+        (clear-question)
+        (clear-response)
+        (disable-button)
+        (respond responses/final-response)))))
 
 (.addEventListener
  (js/document.getElementById "submit-button")
@@ -66,7 +88,6 @@
  (fn [event]
    (let [current-mode (deref mode)]
      (cond
-       (= current-mode :respond) (respond)
+       (= current-mode :respond) (respond (get-response))
        (= current-mode :next) (next-question))))
  false)
-

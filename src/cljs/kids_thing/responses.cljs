@@ -15,3 +15,10 @@
   (atom
    (list {:question "What is your name?"
           :responder respond-to-name})))
+
+(def final-response
+  (let [hour-of-day (.getHours (new js/Date))]
+    (if
+      (< hour-of-day 18)
+      {:text "Have a nice day!" :image "https://live.staticflickr.com/3769/9426404094_054df2e3d4_b.jpg"}
+      {:text "Good night!" :image "https://live.staticflickr.com/3944/15595823515_19c9fecd42_b.jpg"})))
