@@ -41,9 +41,7 @@
 (defn get-next-question []
   (swap! responses/questions-to-responses pop)
   (let [questions-remaining (deref responses/questions-to-responses)]
-    (if (empty? questions-remaining)
-      "Have a nice day!"
-      ((peek questions-remaining) :question))))
+    (if (seq questions-remaining) (questions-remaining :question) nil)))
 
 (defn clear-input []
   (set!
@@ -51,7 +49,12 @@
    ""))
 
 (defn next-question []
-  (show-text (get-next-question) "question")
+  (let [question (get-next-question)]
+    (if
+      question
+      (show-text question "question")
+      (show-text "Have a nice day!" "question")))
+
   (show-text "" "response")
   (clear-input)
   (swap-button-text)
