@@ -1,4 +1,5 @@
-(ns kids-thing.core)
+(ns kids-thing.core
+  (:require [kids-thing.responses :as responses]))
 
 (def mode (atom :respond))
 
@@ -7,15 +8,8 @@
 
 (defn get-answer [] (.-value (js/document.getElementById "input")))
 
-(def questions-to-responses
-  (atom
-   (list {:question "What is your name?"
-          :responder (fn [name]
-                       {:text (str "Hi " name)
-                        :image "https://live.staticflickr.com/7491/16296571715_b3ebde1e38_b.jpg"})})))
-
 (defn get-responder []
-  ((peek (deref questions-to-responses)) :responder))
+  ((peek (deref responses/questions-to-responses)) :responder))
 
 (defn get-response []
   (let [answer (get-answer)
@@ -45,8 +39,8 @@
   (swap! mode next-mode))
 
 (defn get-next-question []
-  (swap! questions-to-responses pop)
-  (let [questions-remaining (deref questions-to-responses)]
+  (swap! responses/questions-to-responses pop)
+  (let [questions-remaining (deref responses/questions-to-responses)]
     (if (empty? questions-remaining)
       "Have a nice day!"
       ((peek questions-remaining) :question))))
