@@ -12,10 +12,32 @@
       true {:text (str "Good evening " capitalised-name)
             :image "https://live.staticflickr.com/65535/48763561263_6707d9fcb2_b.jpg"})))
 
+(defn respond-to-colour [colour]
+  (case (string/lower-case colour)
+    "blue" {:text "Like a cornflower"
+            :image "https://live.staticflickr.com/1530/24857917311_e7e5c13266_b.jpg"}
+    "red" {:text "Like a strawberry"
+           :image "https://live.staticflickr.com/2884/9232635422_be3a8830b8_b.jpg"}
+    "green" {:text "Like grass"
+             :image "https://live.staticflickr.com/658/23163935546_805370060a_b.jpg"}
+    "yellow" {:text "Like a lemon"
+              :image "https://live.staticflickr.com/1660/24579753002_055acccb0b_b.jpg"}
+    "orange" {:text "Like, well, an orange"
+              :image "https://live.staticflickr.com/1288/4673819990_740d801fef_b.jpg"}
+    "white" {:text "Like snow"
+             :image "https://live.staticflickr.com/7675/16662196134_44e1bf8836_b.jpg"}
+    "purple" {:text "Like lavender"
+              :image "https://live.staticflickr.com/4043/4673298431_897aab6b32_b.jpg"}
+    "brown" {:text "Like a bear"
+             :image "https://live.staticflickr.com/65535/48085282968_f46a171c8c_b.jpg"}
+    {:text "Hmm?" :image nil}))
+
 (def questions-to-responses
   (atom
    (list {:question "What is your name?"
-          :responder respond-to-name})))
+          :responder respond-to-name}
+         {:question "What is your favourite colour?"
+          :responder respond-to-colour})))
 
 (def final-response
   (let [hour-of-day (.getHours (new js/Date))]

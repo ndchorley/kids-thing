@@ -32,7 +32,7 @@
 (defn respond [response]
   (let [{:keys [text image]} response]
     (show-text text "response")
-    (show-image image))
+    (if image (show-image image)))
 
   (swap-button-text)
   (swap! mode next-mode))
@@ -40,7 +40,7 @@
 (defn get-next-question []
   (swap! responses/questions-to-responses pop)
   (let [questions-remaining (deref responses/questions-to-responses)]
-    (if (seq questions-remaining) (questions-remaining :question) nil)))
+    (if (seq questions-remaining) ((first questions-remaining) :question) nil)))
 
 (defn clear-input []
   (set!
