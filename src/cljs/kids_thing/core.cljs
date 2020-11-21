@@ -25,22 +25,24 @@
     (.setAttribute element "src" url)
     (.append (js/document.getElementById "image") element)))
 
-(defn swap-button-text []
-  (set! (.-textContent (js/document.getElementById "submit-button"))
-        (if (= (deref mode) :respond) "Next" "Click me")))
+(defn set-button-text [text]
+  (set!
+   (.-textContent (js/document.getElementById "submit-button"))
+   text))
 
 (defn respond [response]
   (let [{:keys [text image]} response]
     (show-text text "response")
     (if image (show-image image)))
 
-  (swap-button-text)
+  (set-button-text "Next")
   (swap! mode next-mode))
 
 (defn get-next-question []
   (swap! responses/questions-to-responses pop)
   (let [questions-remaining (deref responses/questions-to-responses)]
-    (if (seq questions-remaining) ((first questions-remaining) :question) nil)))
+    (if (seq questions-remaining)
+      ((first questions-remaining) :question) nil)))
 
 (defn clear-input []
   (set!
@@ -72,7 +74,7 @@
         (show-question question)
         (clear-input)
         (clear-response)
-        (swap-button-text)
+        (set-button-text "Click me")
         (swap! mode next-mode))
 
       (do
