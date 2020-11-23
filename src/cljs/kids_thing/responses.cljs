@@ -32,12 +32,37 @@
              :image "https://live.staticflickr.com/65535/48085282968_f46a171c8c_b.jpg"}
     {:text "Hmm?" :image nil}))
 
+(defn respond-to-age [age]
+  (let [next-years-age
+        (case (string/lower-case age)
+          ("one" "1") "two"
+          ("two" "2") "three"
+          ("three" "3") "four"
+          ("four" "4") "five"
+          ("five" "5") "six"
+          ("six" "6") "seven"
+          ("seven" "7") "eight"
+          ("eight" "8") "nine"
+          ("nine" "9") "ten"
+          ("ten" "10") "eleven"
+          true "Hmm?")]
+    {:text (str "You will be " next-years-age " next year")
+     :image "https://live.staticflickr.com/2302/2052055757_4e13e12c03_z.jpg"}))
+
+(defn respond-to-game [game]
+  {:text "One day, your uncle will teach you how to play chess"
+   :image "https://upload.wikimedia.org/wikipedia/commons/3/33/Dubrovnik_chess_set.jpg"})
+
 (def questions-to-responses
   (atom
    (list {:question "What is your name?"
           :responder respond-to-name}
+         {:question "How old are you?"
+          :responder respond-to-age}
          {:question "What is your favourite colour?"
-          :responder respond-to-colour})))
+          :responder respond-to-colour}
+         {:question "What is your favourite game?"
+          :responder respond-to-game})))
 
 (def final-response
   (let [hour-of-day (.getHours (new js/Date))]
